@@ -5,6 +5,10 @@
     <kbase name="HelloWorldKB" packages="org.drools.examples.helloworld">
         <ksession name="HelloWorldKS"/>
     </kbase>
+    
+    <kbase name="HelloWorldAOPKB" packages="org.drools.examples.helloworldaop">
+        <ksession name="HelloWorldAOPKS"/>
+    </kbase>
 
     <kbase name="StateSalienceKB" packages="org.drools.examples.state.salience">
         <ksession name="StateSalienceKS"/>

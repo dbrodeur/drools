@@ -1,0 +1,14 @@
+pattern: 
+ - ".+[drl|DRL]"
+imports:
+ - "import function org.drools.examples.helloworldaop.UtilityClass.trace"
+afterrule:
+ - "salience 5"
+afterwhen:
+ - "eval( trace( \"\\${RULE_NAME} when started\" ) )"
+beforethen:
+ - "eval( trace( \"\\${RULE_NAME} when ended\" ) )"
+afterthen:
+ - "eval( trace( \"\\${RULE_NAME} then started\" ) )"
+beforeend:
+ - "eval( trace( \"\\${RULE_NAME} then ended\" ) )"

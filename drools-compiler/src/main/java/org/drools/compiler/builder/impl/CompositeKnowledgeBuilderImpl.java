@@ -13,6 +13,7 @@ import org.drools.core.util.StringUtils;
 import org.kie.api.io.Resource;
 import org.kie.api.io.ResourceConfiguration;
 import org.kie.api.io.ResourceType;
+import org.kie.internal.builder.AOPKnowledgeBuilder;
 import org.kie.internal.builder.ChangeType;
 import org.kie.internal.builder.CompositeKnowledgeBuilder;
 import org.kie.internal.builder.ResourceChange;
@@ -85,6 +86,7 @@ public class CompositeKnowledgeBuilderImpl implements CompositeKnowledgeBuilder 
 
     public void build() {
         buildException = null;
+        processAOPResources();
         kBuilder.registerBuildResources(getResources());
         registerDSL();
         buildResources();
@@ -105,6 +107,18 @@ public class CompositeKnowledgeBuilderImpl implements CompositeKnowledgeBuilder 
         buildOtherDeclarations(packages);
         normalizeRuleAnnotations( packages );
         buildRules(packages);
+    }
+    
+    private void processAOPResources() {
+    	//inject
+    	AOPKnowledgeBuilder aopBuilder = new AOPProcessBuilderImpl();
+    	aopBuilder.readAOPResources(getResources());
+        resourcesByType.remove(ResourceType.AOP);
+    	List<Resource> newResources = aopBuilder.applyAOPToResource(getResources());
+    	resourcesByType.clear();
+    	for( Resource res: newResources) {
+    		add(res, ResourceType.determineResourceType(res.getSourcePath()));
+    	}
     }
 
     private void normalizeTypeAnnotations( Collection<CompositePackageDescr> packages ) {

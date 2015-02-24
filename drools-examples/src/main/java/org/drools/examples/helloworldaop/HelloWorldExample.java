@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.drools.examples.helloworld;
+package org.drools.examples.helloworldaop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,16 +48,14 @@ public class HelloWorldExample {
         
         // From the kie services, a container is created from the classpath
         KieContainer kc = ks.getKieClasspathContainer();
-        kc.getKieBase("HelloWorldKB").addEventListener(new MyListener());
-        Rule rule = kc.getKieBase("HelloWorldKB").getRule("org.drools.examples.helloworld", "Hello World");
         
         // From the container, a session is created based on  
         // its definition and configuration in the META-INF/kmodule.xml file 
-        KieSession ksession = kc.newKieSession("HelloWorldKS");
+        KieSession ksession = kc.newKieSession("HelloWorldAOPKS");
         
         // Once the session is created, the application can interact with it
         // In this case it is setting a global as defined in the 
-        // org/drools/examples/helloworld/HelloWorld.drl file
+        // org/drools/examples/helloworldaop/HelloWorld.drl file
         ksession.setGlobal( "list",
                             new ArrayList<Object>() );
 

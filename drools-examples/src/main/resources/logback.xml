@@ -9,9 +9,10 @@
     </encoder>
   </appender>
 
-  <logger name="org.drools" level="info"/>
+  <logger name="org.drools" level="debug"/>
+  <logger name="*" level="debug"/>
 
-  <root level="warn">
+  <root level="debug">
     <appender-ref ref="consoleAppender" />
   </root>
 
