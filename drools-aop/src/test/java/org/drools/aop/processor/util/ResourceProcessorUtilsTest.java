@@ -1,6 +1,7 @@
-package org.drools.aop.builder.util;
+package org.drools.aop.processor.util;
 
 import org.drools.aop.model.AOPResource;
+import org.drools.aop.processor.util.ResourceProcessorUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,9 +9,9 @@ public class ResourceProcessorUtilsTest {
 	@Test
 	public void testPackageRegExValid() {
 		AOPResource aop = new AOPResource();
-		aop.setImports("import some.imports");
+		aop.setAfterPackage("import some.imports");
 		String ruleContent = "blah sdfsdfsdf\npackage com.test.myrules\nimport com.ok.blah"; 
-		String ruleResult = ResourceProcessorUtils.applyImports(aop, ruleContent);
+		String ruleResult = ResourceProcessorUtils.applyAfterPackage(aop, ruleContent);
 		
 		Assert.assertEquals("The rule content should have the new import", ruleResult,"blah sdfsdfsdf\npackage com.test.myrules\nimport some.imports\nimport com.ok.blah");
 		

@@ -1,4 +1,4 @@
-package org.drools.aop.builder;
+package org.drools.aop.processor;
 
 import java.util.List;
 

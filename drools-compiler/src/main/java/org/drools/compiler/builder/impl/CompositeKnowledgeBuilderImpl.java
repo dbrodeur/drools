@@ -1,7 +1,7 @@
 package org.drools.compiler.builder.impl;
 
-import org.drools.aop.builder.ResourceProcessor;
-import org.drools.aop.builder.impl.ResourceProcessorImpl;
+import org.drools.aop.processor.ResourceProcessor;
+import org.drools.aop.processor.impl.ResourceProcessorImpl;
 import org.drools.compiler.compiler.BPMN2ProcessFactory;
 import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.compiler.lang.descr.AbstractClassTypeDeclarationDescr;

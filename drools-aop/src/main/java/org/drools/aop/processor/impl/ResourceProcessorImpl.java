@@ -1,22 +1,19 @@
-package org.drools.aop.builder.impl;
+package org.drools.aop.processor.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.drools.aop.builder.ResourceProcessor;
-import org.drools.aop.builder.util.ResourceProcessorUtils;
 import org.drools.aop.model.AOPResource;
+import org.drools.aop.processor.ResourceProcessor;
+import org.drools.aop.processor.util.ResourceProcessorUtils;
 import org.drools.core.io.impl.ByteArrayResource;
 import org.drools.core.util.IoUtils;
 import org.kie.api.io.Resource;
 import org.kie.api.io.ResourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.Yaml;
 
 public class ResourceProcessorImpl implements ResourceProcessor {
 
@@ -26,8 +23,7 @@ public class ResourceProcessorImpl implements ResourceProcessor {
 	private List<AOPResource> aopResources = new ArrayList<AOPResource>();
 
 	private List<Resource> resources;
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void loadResources(List<Resource> allResources) {
 		List<Resource> filteredResources = new ArrayList<Resource>();
@@ -36,8 +32,6 @@ public class ResourceProcessorImpl implements ResourceProcessor {
 				if (ResourceType
 						.determineResourceType(resource.getSourcePath())
 						.equals(ResourceType.AOP)) {
-					Map<String, ArrayList<Object>> map = (Map<String, ArrayList<Object>>) new Yaml()
-							.load(resource.getInputStream());
 					aopResources.add(ResourceProcessorUtils
 							.loadAOPResource(resource));
 				} else {
@@ -60,8 +54,8 @@ public class ResourceProcessorImpl implements ResourceProcessor {
 		String ruleContent = new String(
 				IoUtils.readBytesFromInputStream(resource
 						.getInputStream()));
-		if(aopResource.getImports()!=null) {
-			ruleContent = ResourceProcessorUtils.applyImports(
+		if(aopResource.getAfterPackage()!=null) {
+			ruleContent = ResourceProcessorUtils.applyAfterPackage(
 					aopResource, ruleContent);
 		}
 		if(aopResource.getAfterRule()!=null) {

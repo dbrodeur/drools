@@ -1,6 +1,6 @@
 pattern: 
  - ".+[drl|DRL]"
-imports:
+afterPackage:
  - "import function org.drools.examples.helloworldaop.UtilityClass.trace"
 afterRule:
  - "salience 5"

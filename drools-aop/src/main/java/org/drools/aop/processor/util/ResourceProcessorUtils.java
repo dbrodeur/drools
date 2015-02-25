@@ -1,4 +1,4 @@
-package org.drools.aop.builder.util;
+package org.drools.aop.processor.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import org.yaml.snakeyaml.Yaml;
 public class ResourceProcessorUtils {
 
 	private static final String YAML_AOP_RULE_PATTERN = "pattern";
-	private static final String YAML_AOP_IMPORTS = "imports";
+	private static final String YAML_AOP_AFTER_PACKAGE = "afterPackage";
 	private static final String YAML_AOP_AFTER_RULE = "afterRule";
 	private static final String YAML_AOP_AFTER_WHEN = "afterWhen";
 	private static final String YAML_AOP_AFTER_THEN = "afterThen";
@@ -32,9 +32,9 @@ public class ResourceProcessorUtils {
 	private static final Pattern BEFORE_END = Pattern
 			.compile("(?m)(^\\s*end\\s*$)");
 	
-	public static String applyImports(AOPResource resource, String ruleContent) {
+	public static String applyAfterPackage(AOPResource resource, String ruleContent) {
 		return PACKAGE_PATTERN.matcher(ruleContent).replaceAll(
-				"$1\n" + resource.getImports());
+				"$1\n" + resource.getAfterPackage());
 	}
 	
 	public static String applyAfterRule(AOPResource resource, String ruleContent) {
@@ -80,7 +80,7 @@ public class ResourceProcessorUtils {
 
 		AOPResource aopResource = new AOPResource();
 		aopResource.setRulePattern(loadYamlContent(YAML_AOP_RULE_PATTERN, map));
-		aopResource.setImports(loadYamlContent(YAML_AOP_IMPORTS, map));
+		aopResource.setAfterPackage(loadYamlContent(YAML_AOP_AFTER_PACKAGE, map));
 		aopResource.setAfterRule(loadYamlContent(YAML_AOP_AFTER_RULE, map));
 		aopResource.setAfterWhen(loadYamlContent(YAML_AOP_AFTER_WHEN, map));
 		aopResource.setAfterThen(loadYamlContent(YAML_AOP_AFTER_THEN, map));
