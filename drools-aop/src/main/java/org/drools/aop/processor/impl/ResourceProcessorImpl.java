@@ -20,13 +20,8 @@ public class ResourceProcessorImpl implements ResourceProcessor {
 	protected static final transient Logger logger = LoggerFactory
 			.getLogger(ResourceProcessorImpl.class);
 
-	private List<AOPResource> aopResources = new ArrayList<AOPResource>();
-
-	private List<Resource> resources;
-	
-	@Override
-	public void loadResources(List<Resource> allResources) {
-		List<Resource> filteredResources = new ArrayList<Resource>();
+	private List<AOPResource> loadAOPResources(List<Resource> allResources) {
+		List<AOPResource> aopResources = new ArrayList<AOPResource>();
 		try {
 			for (Resource resource : allResources) {
 				if (ResourceType
@@ -34,58 +29,70 @@ public class ResourceProcessorImpl implements ResourceProcessor {
 						.equals(ResourceType.AOP)) {
 					aopResources.add(ResourceProcessorUtils
 							.loadAOPResource(resource));
-				} else {
-					filteredResources.add(resource);
 				}
 			}
 		} catch (IOException e) {
 			logger.error("An error occured while processing AOP resources", e);
 		}
-		this.resources = filteredResources;
+		return aopResources;
 	}
-	
-	private ByteArrayResource createByteArrayResource(Resource resource, String content) {
+
+	private List<Resource> cleanAOPResources(List<Resource> allResources) {
+		List<Resource> nonAOPResources = new ArrayList<Resource>();
+		for (Resource resource : allResources) {
+			if (!ResourceType.determineResourceType(resource.getSourcePath())
+					.equals(ResourceType.AOP)) {
+				nonAOPResources.add(resource);
+			}
+		}
+		return nonAOPResources;
+	}
+
+	private ByteArrayResource createByteArrayResource(Resource resource,
+			String content) {
 		ByteArrayResource res = new ByteArrayResource(content.getBytes());
 		res.setSourcePath(resource.getSourcePath());
 		return res;
 	}
 
-	private String applyDroolsAOP(Resource resource, AOPResource aopResource) throws IOException {
+	private String applyDroolsAOP(Resource resource, AOPResource aopResource)
+			throws IOException {
 		String ruleContent = new String(
-				IoUtils.readBytesFromInputStream(resource
-						.getInputStream()));
-		if(aopResource.getAfterPackage()!=null) {
-			ruleContent = ResourceProcessorUtils.applyAfterPackage(
-					aopResource, ruleContent);
+				IoUtils.readBytesFromInputStream(resource.getInputStream()));
+		if (aopResource.getAfterPackage() != null) {
+			ruleContent = ResourceProcessorUtils.applyAfterPackage(aopResource,
+					ruleContent);
 		}
-		if(aopResource.getAfterRule()!=null) {
-			ruleContent = ResourceProcessorUtils.applyAfterRule(
-					aopResource, ruleContent);			
+		if (aopResource.getAfterRule() != null) {
+			ruleContent = ResourceProcessorUtils.applyAfterRule(aopResource,
+					ruleContent);
 		}
-		if(aopResource.getAfterThen()!=null) {
-			ruleContent = ResourceProcessorUtils.applyAfterThen(
-					aopResource, ruleContent);			
+		if (aopResource.getAfterThen() != null) {
+			ruleContent = ResourceProcessorUtils.applyAfterThen(aopResource,
+					ruleContent);
 		}
-		if(aopResource.getAfterWhen()!=null) {
-			ruleContent = ResourceProcessorUtils.applyAfterWhen(
-					aopResource, ruleContent);			
+		if (aopResource.getAfterWhen() != null) {
+			ruleContent = ResourceProcessorUtils.applyAfterWhen(aopResource,
+					ruleContent);
 		}
-		if(aopResource.getBeforeThen()!=null) {
-			ruleContent = ResourceProcessorUtils.applyBeforeThen(
-					aopResource, ruleContent);			
-		}		
-		if(aopResource.getBeforeEnd()!=null) {
-			ruleContent = ResourceProcessorUtils.applyBeforeEnd(
-					aopResource, ruleContent);			
+		if (aopResource.getBeforeThen() != null) {
+			ruleContent = ResourceProcessorUtils.applyBeforeThen(aopResource,
+					ruleContent);
+		}
+		if (aopResource.getBeforeEnd() != null) {
+			ruleContent = ResourceProcessorUtils.applyBeforeEnd(aopResource,
+					ruleContent);
 		}
 		return ruleContent;
 	}
-	
+
 	@Override
-	public List<Resource> processResources() {
+	public List<Resource> processResources(List<Resource> allResources) {
 		List<Resource> result = new ArrayList<Resource>();
 		try {
-			for (Resource resource : resources) {
+			List<AOPResource> aopResources = loadAOPResources(allResources);
+			List<Resource> newResources = cleanAOPResources(allResources);
+			for (Resource resource : newResources) {
 				if (ResourceType
 						.determineResourceType(resource.getSourcePath())
 						.equals(ResourceType.DRL)) {
@@ -97,10 +104,12 @@ public class ResourceProcessorImpl implements ResourceProcessor {
 							logger.debug("Matched resource: {}",
 									resource.getSourcePath());
 
-							String ruleContent = applyDroolsAOP(resource, aopResource);
-							
+							String ruleContent = applyDroolsAOP(resource,
+									aopResource);
+
 							logger.debug("Rule Content Changed:" + ruleContent);
-							result.add(createByteArrayResource(resource, ruleContent));
+							result.add(createByteArrayResource(resource,
+									ruleContent));
 							matched = true;
 						}
 					}

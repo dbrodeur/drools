@@ -1,14 +1,15 @@
 pattern: 
- - ".+[drl|DRL]"
+ - "(.+)\\.drl"
 afterPackage:
  - "import function org.drools.examples.helloworldaop.UtilityClass.trace"
+ - "import function org.drools.examples.helloworldaop.UtilityClass.trace2"
 afterRule:
  - "salience 5"
 afterWhen:
- - "eval( trace( \"\\${RULE_NAME} when started\" ) )"
+ - "eval( trace( \"after when\" ) )"
 beforeThen:
- - "eval( trace( \"\\${RULE_NAME} when ended\" ) )"
+ - "eval( trace( \"before when\" ) )"
 afterThen:
- - "trace( \"\\${RULE_NAME} then started\" );"
+ - "trace( \"after then\" );"
 beforeEnd:
- - "trace( \"\\${RULE_NAME} then ended\" );"
+ - "trace( \"before end\" );"

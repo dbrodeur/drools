@@ -5,4 +5,9 @@ public class UtilityClass {
 		System.out.println(msg);
 		return true;
 	}
+	
+	public static boolean trace2( String msg ) {
+		System.out.println(msg);
+		return true;
+	}
 }

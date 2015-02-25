@@ -114,8 +114,7 @@ public class CompositeKnowledgeBuilderImpl implements CompositeKnowledgeBuilder 
     private void processAOPResources() {
     	//inject
     	ResourceProcessor aopResourceProcessor = new ResourceProcessorImpl();
-    	aopResourceProcessor.loadResources(getResources());
-    	List<Resource> newResources = aopResourceProcessor.processResources();
+    	List<Resource> newResources = aopResourceProcessor.processResources(getResources());
     	resourcesByType.clear();
     	for( Resource res: newResources) {
     		add(res, ResourceType.determineResourceType(res.getSourcePath()));

@@ -2,6 +2,7 @@ package org.drools.aop.processor.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -61,13 +62,20 @@ public class ResourceProcessorUtils {
 		return BEFORE_END.matcher(ruleContent).replaceAll(
 				resource.getBeforeEnd() + "\n$1");
 	}
+	
+	private static String generateStringFromList(List<Object> objects) {
+		StringBuffer buffer = new StringBuffer();
+		for( Object obj: objects ) {
+			buffer.append(obj.toString());
+			buffer.append("\n");
+		}
+		return buffer.deleteCharAt(buffer.length()-1).toString();
+	}
+	
 	private static String loadYamlContent(String key,
 			Map<String, ArrayList<Object>> map) {
 		if (map.containsKey(key)) {
-			ArrayList<Object> objects = map.get(key);
-			if (objects.size() > 0) {
-				return objects.get(0).toString();
-			}
+			return generateStringFromList(map.get(key));
 		}
 		return null;
 	}
