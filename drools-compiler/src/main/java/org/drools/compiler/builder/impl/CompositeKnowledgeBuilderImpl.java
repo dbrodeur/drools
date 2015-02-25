@@ -1,5 +1,7 @@
 package org.drools.compiler.builder.impl;
 
+import org.drools.aop.builder.ResourceProcessor;
+import org.drools.aop.builder.impl.ResourceProcessorImpl;
 import org.drools.compiler.compiler.BPMN2ProcessFactory;
 import org.drools.compiler.compiler.PackageRegistry;
 import org.drools.compiler.lang.descr.AbstractClassTypeDeclarationDescr;
@@ -111,10 +113,9 @@ public class CompositeKnowledgeBuilderImpl implements CompositeKnowledgeBuilder 
     
     private void processAOPResources() {
     	//inject
-    	AOPKnowledgeBuilder aopBuilder = new AOPProcessBuilderImpl();
-    	aopBuilder.readAOPResources(getResources());
-        resourcesByType.remove(ResourceType.AOP);
-    	List<Resource> newResources = aopBuilder.applyAOPToResource(getResources());
+    	ResourceProcessor aopResourceProcessor = new ResourceProcessorImpl();
+    	aopResourceProcessor.loadResources(getResources());
+    	List<Resource> newResources = aopResourceProcessor.processResources();
     	resourcesByType.clear();
     	for( Resource res: newResources) {
     		add(res, ResourceType.determineResourceType(res.getSourcePath()));

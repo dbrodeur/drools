@@ -65,6 +65,7 @@
     <module>drools-examples-cdi</module>
     <module>drools-workbench-models</module>
     <module>knowledge-api-legacy5-adapter</module>
+    <module>drools-aop</module>
   </modules>
 
   <profiles>
