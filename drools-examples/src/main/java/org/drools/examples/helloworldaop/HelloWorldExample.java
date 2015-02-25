@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kie.api.KieServices;
-import org.kie.api.definition.rule.Rule;
 import org.kie.api.event.kiebase.AfterRuleAddedEvent;
 import org.kie.api.event.kiebase.DefaultKieBaseEventListener;
 import org.kie.api.event.rule.DebugAgendaEventListener;
